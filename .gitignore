@@ -1,0 +1,75 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+logs/*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+/.pnp
+.pnp.js
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+
+# Build directories
+/dist
+/build
+/out
+
+# Coverage directories and test reports
+coverage/
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
+
+# Package files
+package-lock.json
+yarn.lock
+
+# Compiled code
+*.class
+*.pyc
+*.o
+*.out
+
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# macOS-specific files
+.AppleDouble
+.LSOverride
+
+# React Native
+android/
+ios/
+*.keystore
+
+# TypeScript
+*.tsbuildinfo
