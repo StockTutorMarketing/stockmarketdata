@@ -73,7 +73,7 @@ export const ZerodhahistoryData = async (req: Request, res: Response) => {
             },
             headers: {
                 'X-Kite-Version': `3`,
-                'Authorization': `token ${process.env.ZERODHA_API_KEY}:QTXrWAAsQARTBiWot7N6wloq7M1aOhwk`,
+                'Authorization': `token zm8b8kat9ok624cd:QTXrWAAsQARTBiWot7N6wloq7M1aOhwk`,
             },
         });
 
