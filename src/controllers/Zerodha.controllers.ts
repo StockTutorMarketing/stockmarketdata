@@ -32,7 +32,7 @@ function getAllData(date: any) {
 }
 
 export const ZerodhahistoryData = async (req: Request, res: Response) => {
-    let ZERODHA_ACCESS_TOKEN = await getCredentials()
+    // let ZERODHA_ACCESS_TOKEN = await getCredentials()
     try {
         let { instrument_token, from, to, interval } = req.body;
 
@@ -73,7 +73,7 @@ export const ZerodhahistoryData = async (req: Request, res: Response) => {
             },
             headers: {
                 'X-Kite-Version': `3`,
-                'Authorization': `token ${process.env.ZERODHA_API_KEY}:${ZERODHA_ACCESS_TOKEN ||"QTXrWAAsQARTBiWot7N6wloq7M1aOhwk"}`,
+                'Authorization': `token ${process.env.ZERODHA_API_KEY}:${"QTXrWAAsQARTBiWot7N6wloq7M1aOhwk"}`,
             },
         });
 
