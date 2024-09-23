@@ -32,7 +32,6 @@ function getAllData(date: any) {
 }
 
 export const ZerodhahistoryData = async (req: Request, res: Response) => {
-    // let ZERODHA_ACCESS_TOKEN = await getCredentials()
     try {
         let { instrument_token, from, to, interval } = req.body;
 
@@ -66,6 +65,9 @@ export const ZerodhahistoryData = async (req: Request, res: Response) => {
             intervalTime = interval
         }
 
+        let ZERODHA_API_KEY='zm8b8kat9ok624cd'
+        let ZERODHA_ACCESS_TOKEN='QTXrWAAsQARTBiWot7N6wloq7M1aOhwk'
+
         let response: any = await axios.get(`https://api.kite.trade/instruments/historical/${instrument_token}/${intervalTime}`, {
             params: {
                 from: newData,
@@ -73,7 +75,7 @@ export const ZerodhahistoryData = async (req: Request, res: Response) => {
             },
             headers: {
                 'X-Kite-Version': `3`,
-                'Authorization': `token zm8b8kat9ok624cd:QTXrWAAsQARTBiWot7N6wloq7M1aOhwk`,
+                'Authorization': `token ${ZERODHA_API_KEY}:${ZERODHA_ACCESS_TOKEN ||""}`,
             },
         });
 
