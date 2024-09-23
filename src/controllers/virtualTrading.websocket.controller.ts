@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Wallet } from '../models/wallet.model.js';
 
 // Kite API keys
-const apiKey = 'zm8b8kat9ok624cd';
-const accessToken = '5g2x4WvCJ6mmolJRM7yLnTWeH4av2h6j';
+const apiKey = process.env.ZERODHA_API_KEY || "zm8b8kat9ok624cd";
+const accessToken =process.env.ZERODHA_ACCESS_TOKEN || 'QTXrWAAsQARTBiWot7N6wloq7M1aOhwk';
 
 // Initialize Kite Ticker
 const ticker = new KiteTicker({
