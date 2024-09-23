@@ -12,14 +12,14 @@ export const ZerodhahistoryData = async (req:Request, res:Response) => {
             });
         }
 
-        const response:any = await axios.get(`${process.env.ZERODHA_ROOT_API}/instruments/historical/${instrument_token}/${interval}`, {
+        const response:any = await axios.get(`${process.env.ZERODHA_ROOT_API ||"https://api.kite.trade"}/instruments/historical/${instrument_token}/${interval}`, {
             params: {
                 from: from,
                 to: to,
             },
             headers: {
-                'X-Kite-Version': `${process.env.ZERODHA_API_VERSION}`,
-                'Authorization': `token ${process.env.ZERODHA_API_KEY}:${process.env.ZERODHA_ACCESS_TOKEN}`,
+                'X-Kite-Version': `${process.env.ZERODHA_API_VERSION || "3"}`,
+                'Authorization': `token ${process.env.ZERODHA_API_KEY || "zm8b8kat9ok624cd"}:${process.env.ZERODHA_ACCESS_TOKEN || "QTXrWAAsQARTBiWot7N6wloq7M1aOhwk"}`,
             },
         });
 
