@@ -80,10 +80,6 @@ export const ZerodhahistoryData = async (req: Request, res: Response) => {
         });
 
 
-
-
-
-
         const convertedCandles = response.data.data.candles.map((candle: any) => [
             new Date(candle[0]).getTime(),
             candle[1],
