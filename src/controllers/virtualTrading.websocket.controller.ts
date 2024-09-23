@@ -4,11 +4,9 @@ import { VirtualTradingOrder } from '../models/VirtualTradeOrder.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Wallet } from '../models/wallet.model.js';
 
-// Kite API keys
 const apiKey = process.env.ZERODHA_API_KEY || "zm8b8kat9ok624cd";
 const accessToken =process.env.ZERODHA_ACCESS_TOKEN || 'QTXrWAAsQARTBiWot7N6wloq7M1aOhwk';
 
-// Initialize Kite Ticker
 const ticker = new KiteTicker({
   api_key: apiKey,
   access_token: accessToken,
@@ -35,7 +33,7 @@ class WebSocketClient {
     this.pingTimeout = setTimeout(() => {
       console.log(`Disconnecting user ${this.client} due to no ping`);
       this.ws.close(1001, 'Ping timeout - Disconnecting.');
-    }, 30000);
+    }, 10000);
   }
 
   // Setup KiteTicker for price updates

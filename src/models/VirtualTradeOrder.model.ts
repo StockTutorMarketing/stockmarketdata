@@ -1,7 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 import { VIRTUAL_TRADING_DELIVERY_TYPE, VIRTUAL_TRADING_ORDER_STATUS, VIRTUAL_TRADING_ORDER_TRADE_TYPE, VIRTUAL_TRADING_ORDER_TYPE } from "../common/constant.common";
 
-// 1. Create an interface representing a document in MongoDB.
 export interface IVirtualOrder {
   _id: Types.ObjectId;
   userId: Types.ObjectId;

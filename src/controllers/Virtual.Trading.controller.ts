@@ -4,12 +4,9 @@ import _ from 'lodash';
 // @ts-ignore
 import getAllSymbols from "../../data/stocks";
 
-
 const DEFAULT_STOCK_COUNT = 100;
 
 
-
-//This is the function that will use to send stock symbol data 
 export const searchSymbols = async (req: Request, res: Response) => {
     const { symbol = '', exchange = '' } = req.query;
     const allSymbols = getAllSymbols;
@@ -28,12 +25,3 @@ export const searchSymbols = async (req: Request, res: Response) => {
     res.json(result);
 };
 
-export const virtualTradingOrder = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-
-        const { instrumentkey, marketPrice, exchange, symbole, quantity } = req.body()
-    }
-    catch (error) {
-        next(error);
-    }
-}
