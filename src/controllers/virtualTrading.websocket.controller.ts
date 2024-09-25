@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Wallet } from '../models/wallet.model.js';
 
 const apiKey = process.env.ZERODHA_API_KEY || "zm8b8kat9ok624cd";
-const accessToken =process.env.ZERODHA_ACCESS_TOKEN || 'QTXrWAAsQARTBiWot7N6wloq7M1aOhwk';
+const accessToken =process.env.ZERODHA_ACCESS_TOKEN || 'JTJQWUfWuYIqtTko17cJjTUVnSBqtVWt';
 
 const ticker = new KiteTicker({
   api_key: apiKey,
@@ -53,7 +53,7 @@ private  subscribeToKite() {
     if (this.subscribedTokens.size > 0) {
       const tokensArray:any = Array.from(this.subscribedTokens);
       ticker.subscribe(tokensArray);
-      ticker.setMode(ticker.modeQuote, tokensArray);
+      ticker.setMode(ticker.modeFull, tokensArray);
     }
   }
 

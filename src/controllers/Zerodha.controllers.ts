@@ -18,19 +18,6 @@ function convertUnixTimestampToZerodhaFormat(unixTimestamp: any) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-
-function getAllData(date: any) {
-    date.setDate(date.getDate() - 1);
-    let year = date.getFullYear();
-    let month = String(date.getMonth() + 1).padStart(2, '0');
-    let day = String(date.getDate()).padStart(2, '0');
-    let hours = String(date.getHours()).padStart(2, '0');
-    let minutes = String(date.getMinutes()).padStart(2, '0');
-    let seconds = String(date.getSeconds()).padStart(2, '0');
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
 export const ZerodhahistoryData = async (req: Request, res: Response) => {
     try {
         let { instrument_token, from, to, interval } = req.body;
@@ -66,7 +53,7 @@ export const ZerodhahistoryData = async (req: Request, res: Response) => {
         }
 
         let ZERODHA_API_KEY='zm8b8kat9ok624cd'
-        let ZERODHA_ACCESS_TOKEN='QTXrWAAsQARTBiWot7N6wloq7M1aOhwk'
+        let ZERODHA_ACCESS_TOKEN='JTJQWUfWuYIqtTko17cJjTUVnSBqtVWt'
 
         let response: any = await axios.get(`https://api.kite.trade/instruments/historical/${instrument_token}/${intervalTime}`, {
             params: {
