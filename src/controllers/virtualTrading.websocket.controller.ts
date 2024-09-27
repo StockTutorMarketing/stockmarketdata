@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Wallet } from '../models/wallet.model.js';
 
 const apiKey = process.env.ZERODHA_API_KEY || "zm8b8kat9ok624cd";
-const accessToken =process.env.ZERODHA_ACCESS_TOKEN || 'JTJQWUfWuYIqtTko17cJjTUVnSBqtVWt';
+const accessToken =process.env.ZERODHA_ACCESS_TOKEN || '7NrrFxbssoZ96CdBsN93r6WzKFjdaeMD';
 
 const ticker = new KiteTicker({
   api_key: apiKey,
@@ -134,13 +134,14 @@ private  subscribeToKite() {
     });
   }
 
-  // Handle buy order
   private async handleBuyOrder(requestData: any) {
-    const { userId, instrument_token, marketPrice, bought_qty, symbol } = requestData;
+    const { userId, instrument_token, marketPrice, bought_qty, symbol } = requestData.data;
+
+    console.log(userId , instrument_token,marketPrice,bought_qty,symbol ,"miajikhalifa")
 
     if (!userId || !instrument_token || !marketPrice || !bought_qty) {
       this.ws.send(
-        JSON.stringify({ status: 'error', message: 'Missing data for buy order' })
+        JSON.stringify({type:"order", status: 'error', message: 'Missing data for buy order' })
       );
       return;
     }
@@ -152,7 +153,7 @@ private  subscribeToKite() {
       const wallet = await Wallet.findOne({ userId });
       if (!wallet || wallet.amount < totalAmount) {
         this.ws.send(
-          JSON.stringify({ status: 'error', message: 'Insufficient wallet balance' })
+          JSON.stringify({ type:"order", status: 'error', message: 'Insufficient wallet balance' })
         );
         return;
       }
