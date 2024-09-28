@@ -5,12 +5,25 @@ import { v4 as uuidv4 } from 'uuid';
 import { Wallet } from '../models/wallet.model.js';
 
 const apiKey = process.env.ZERODHA_API_KEY || "zm8b8kat9ok624cd";
-const accessToken =process.env.ZERODHA_ACCESS_TOKEN || '7NrrFxbssoZ96CdBsN93r6WzKFjdaeMD';
+const accessToken = process.env.ZERODHA_ACCESS_TOKEN || 'aY3OmVbUkRzAD3hFcYhDhvo5hGyqF8fI';
 
 const ticker = new KiteTicker({
   api_key: apiKey,
   access_token: accessToken,
 });
+
+async function getUniqueOrderId() {
+  let orderId;
+  let exists = true;
+
+  while (exists) {
+      orderId = uuidv4(); 
+      const existingOrder = await VirtualTradingOrder.findOne({ orderId });
+      exists = !!existingOrder; 
+  }
+
+  return orderId;
+}
 
 class WebSocketClient {
   private ws: WebSocket;
@@ -22,13 +35,12 @@ class WebSocketClient {
     this.ws = ws;
     this.client = client;
     this.pingTimeout = undefined;
-    this.heartbeat();
+    this.heartbeat()
     this.setupMessageHandling();
     this.setupKiteTicker();
   }
 
-  // Heartbeat for connection keep-alive
- private heartbeat(): void {
+  private heartbeat(): void {
     clearTimeout(this.pingTimeout);
     this.pingTimeout = setTimeout(() => {
       console.log(`Disconnecting user ${this.client} due to no ping`);
@@ -36,11 +48,10 @@ class WebSocketClient {
     }, 10000);
   }
 
-  // Setup KiteTicker for price updates
- private setupKiteTicker() {
+  private setupKiteTicker() {
     ticker.on('ticks', this.handleKiteData.bind(this));
     ticker.on('connect', this.subscribeToKite.bind(this));
-    ticker.on('error', (error:any) => {
+    ticker.on('error', (error: any) => {
       console.error('KiteTicker error:', error);
     });
     ticker.on('disconnect', () => {
@@ -49,16 +60,16 @@ class WebSocketClient {
     ticker.connect();
   }
 
-private  subscribeToKite() {
+  private subscribeToKite() {
     if (this.subscribedTokens.size > 0) {
-      const tokensArray:any = Array.from(this.subscribedTokens);
+      const tokensArray: any = Array.from(this.subscribedTokens);
       ticker.subscribe(tokensArray);
       ticker.setMode(ticker.modeFull, tokensArray);
     }
   }
 
- private handleKiteData(ticks:any) {
-    ticks.forEach((tick:any) => {
+  private handleKiteData(ticks: any) {
+    ticks.forEach((tick: any) => {
       if (this.subscribedTokens.has(tick.instrument_token)) {
         this.ws.send(JSON.stringify(tick));
       }
@@ -82,7 +93,6 @@ private  subscribeToKite() {
     this.subscribedTokens.clear();
   }
 
-  // Setup WebSocket message handling
   private setupMessageHandling(): void {
     this.ws.on('message', async (data) => {
       try {
@@ -136,51 +146,54 @@ private  subscribeToKite() {
 
   private async handleBuyOrder(requestData: any) {
     const { userId, instrument_token, marketPrice, bought_qty, symbol } = requestData.data;
-
-    console.log(userId , instrument_token,marketPrice,bought_qty,symbol ,"miajikhalifa")
-
     if (!userId || !instrument_token || !marketPrice || !bought_qty) {
       this.ws.send(
-        JSON.stringify({type:"order", status: 'error', message: 'Missing data for buy order' })
+        JSON.stringify({ type: "order", status: 'error', message: 'Missing data for buy order' })
       );
       return;
     }
 
     const totalAmount = marketPrice * bought_qty;
-    const orderId = uuidv4();
 
     try {
-      const wallet = await Wallet.findOne({ userId });
-      if (!wallet || wallet.amount < totalAmount) {
-        this.ws.send(
-          JSON.stringify({ type:"order", status: 'error', message: 'Insufficient wallet balance' })
+        const wallet = await Wallet.findOne({ userId });
+        if (!wallet || wallet.amount < totalAmount) {
+            this.ws.send(
+                JSON.stringify({ type: "order", status: 'error', message: 'Insufficient wallet balance' })
+            );
+            return;
+        }
+
+        wallet.amount -= totalAmount;
+        await wallet.save();
+
+        const orderId = await getUniqueOrderId();
+        console.log(orderId, "this is unique orderId");
+
+        const order = await VirtualTradingOrder.findOneAndUpdate(
+            { userId, instrument_token },
+            { 
+                $inc: { bought_qty },
+                orderId 
+            },
+            { upsert: true, new: true }
         );
-        return;
-      }
 
-      wallet.amount -= totalAmount;
-      await wallet.save();
-
-      const order = await VirtualTradingOrder.findOneAndUpdate(
-        { userId, instrument_token },
-        { $inc: { bought_qty } },
-        { upsert: true, new: true }
-      );
-
-      this.ws.send(
-        JSON.stringify({ status: 'success', message: `Buy order placed for ${symbol}`, orderId })
-      );
+        this.ws.send(
+            JSON.stringify({ type: "order", status: 'success', message: `Buy order placed for ${symbol}`, orderId })
+        );
     } catch (error: any) {
-      console.error('Error handling buy order:', error);
-      this.ws.send(
-        JSON.stringify({
-          status: 'error',
-          message: 'Error processing buy order',
-          details: error.message,
-        })
-      );
+        console.error('Error handling buy order:', error);
+        this.ws.send(
+            JSON.stringify({
+                type: "order",
+                status: 'error',
+                message: 'Error processing buy order',
+                details: error.message,
+            })
+        );
     }
-  }
+}
 
   // Handle sell order
   private async handleSellOrder(requestData: any) {
@@ -239,7 +252,7 @@ private  subscribeToKite() {
       }
 
       const wallet: any = await Wallet.findOne({ userId });
-      wallet.amount += order.totalPurchasePrice; 
+      wallet.amount += order.totalPurchasePrice;
       await wallet.save();
 
       this.ws.send(

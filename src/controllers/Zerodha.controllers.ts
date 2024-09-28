@@ -72,19 +72,12 @@ export const ZerodhahistoryData = async (req: Request, res: Response) => {
             newData = new Date(new Date(from).setDate(new Date(from).getDate() - 10)).toISOString().replace('T', ' ').substring(0, 19);
         }
 
-        let intervalTime;
-
-        if (interval === 'week' || interval === 'month') {
-            intervalTime = 'day'
-        } else {
-            intervalTime = interval
-        }
 
         let ZERODHA_API_KEY='zm8b8kat9ok624cd'
-        let ZERODHA_ACCESS_TOKEN='7NrrFxbssoZ96CdBsN93r6WzKFjdaeMD'
+        let ZERODHA_ACCESS_TOKEN='aY3OmVbUkRzAD3hFcYhDhvo5hGyqF8fI'
 
 
-        let response: any = await axios.get(`https://api.kite.trade/instruments/historical/${instrument_token}/${intervalTime}`, {
+        let response: any = await axios.get(`https://api.kite.trade/instruments/historical/${instrument_token}/${interval}`, {
             params: {
                 from: newData,
                 to: to,
@@ -104,7 +97,6 @@ export const ZerodhahistoryData = async (req: Request, res: Response) => {
             candle[5]
         ]);
 
-        console.log(response.data ,"this is my data")
 
         res.json({
             status: true,

@@ -5,8 +5,9 @@ export interface IVirtualOrder {
   _id: Types.ObjectId;
   userId: Types.ObjectId;
   instrument_token: string,
+  instrument_symbol:string,
   bought_qty: number;
-  individualPurchasePrice: number;
+  individualPurchasePrice: number; 
   instrument_name: string,
   totalPurchasePrice: number;
 

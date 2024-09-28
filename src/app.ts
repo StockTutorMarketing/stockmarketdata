@@ -12,14 +12,14 @@ app.use(express.json())
 dotenv.config()
 
 
-// //Database
-// mongoose.connect(process.env.MONGOURI || "")
-//     .then((connection) => {
-//         console.log(`Database connected: ${connection.connection.host}`);
-//     })
-//     .catch((error) => {
-//         console.error("Database connection error:", error);
-// });
+//Database
+mongoose.connect(process.env.MONGOURI || "")
+    .then((connection) => {
+        console.log(`Database connected: ${connection.connection.host}`);
+    })
+    .catch((error) => {
+        console.error("Database connection error:", error);
+});
 
 
 app.use("/api/v1", ZerodhahistoryData)
